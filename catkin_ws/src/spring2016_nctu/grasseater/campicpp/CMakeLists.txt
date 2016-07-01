@@ -15,7 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 
-find_package(OpenCV REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -121,7 +120,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}		
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -196,4 +195,7 @@ include_directories(
 
 add_executable(imgpreproc src/imgpreproc.cpp)
 target_link_libraries(imgpreproc ${catkin_LIBRARIES})
-	
+add_executable(imgundist src/imgundist.cpp)
+target_link_libraries(imgundist ${catkin_LIBRARIES})
+
+#add_dependencies(imgpreproc )

@@ -11,23 +11,25 @@
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 from math import fabs, floor
+from HaBonBon import HaBonBon
 
 class DAGU_Differential_Drive:
 
-    LEFT_MOTOR_MIN_PWM = 60        # Minimum speed for left motor  
-    LEFT_MOTOR_MAX_PWM = 255       # Maximum speed for left motor  
+    LEFT_MOTOR_MIN_PWM = 40        # Minimum speed for left motor  
+    LEFT_MOTOR_MAX_PWM = 100       # Maximum speed for left motor  
 
-    RIGHT_MOTOR_MIN_PWM = 60       # Minimum speed for right motor  
-    RIGHT_MOTOR_MAX_PWM = 255      # Maximum speed for right motor  
+    RIGHT_MOTOR_MIN_PWM = 40       # Minimum speed for right motor  
+    RIGHT_MOTOR_MAX_PWM = 100      # Maximum speed for right motor  
 
     AXEL_TO_RADIUS_RATIO = 1.0     # The axel length and turning radius ratio
     SPEED_TOLERANCE = 1.e-2;       # speed tolerance level
 
     def __init__(self, verbose=False, debug=False, left_flip=False, right_flip=False, car_like_mode=True):
-        self.car_like_mode = car_like_mode
-        self.motorhat = Adafruit_MotorHAT(addr=0x60)
-        self.leftMotor = self.motorhat.getMotor(1)
-        self.rightMotor = self.motorhat.getMotor(2)
+       # self.car_like_mode = car_like_mode
+        self.motorhat = HaBonBon_DCMotor((12,11), (32,31))
+       # self.motorhat = Adafruit_MotorHAT(addr=0x60)
+       # self.leftMotor = self.motorhat.getMotor(1)
+       # self.rightMotor = self.motorhat.getMotor(2)
 
 
         self.verbose = verbose or debug
@@ -90,10 +92,25 @@ class DAGU_Differential_Drive:
         elif vr < 0: 
             rightMotorMode = Adafruit_MotorHAT.BACKWARD
 
-        self.leftMotor.setSpeed(pwml)
-        self.leftMotor.run(leftMotorMode);
-        self.rightMotor.setSpeed(pwmr)
-        self.rightMotor.run(rightMotorMode);
+       # self.leftMotor.setSpeed(pwml)
+       # self.leftMotor.run(leftMotorMode);
+       # self.rightMotor.setSpeed(pwmr)
+       # self.rightMotor.run(rightMotorMode);
+
+       	bl = br = 1.0  #should turn backward? (l = left, r = right)
+     	if leftMotorMode == Adafruit_MotorHAT.BACKWARD:
+		bl = -1.0
+	elif leftMotorMode == Adafruit_MotorHAT.RELEASE:
+		bl = 0
+
+	
+     	if rightMotorMode == Adafruit_MotorHAT.BACKWARD:
+		br = -1.0
+	elif rightMotorMode == Adafruit_MotorHAT.RELEASE:
+		br = 0
+
+	self.motorhat.leftWheel(bl * pwml)
+	self.motorhat.rightWheel(br * pwmr)
 
     # Speed has to be in [-1, 1], sign determines bwd/fwd
     def setSpeed(self, speed):
@@ -124,9 +141,9 @@ class DAGU_Differential_Drive:
 
 
     def __del__(self):
-        self.leftMotor.run(Adafruit_MotorHAT.RELEASE)
-        self.rightMotor.run(Adafruit_MotorHAT.RELEASE)
-        del self.motorhat
+        self.motorhat.leftWheel(0.0)
+        self.motorhat.rightWheel(0.0)
+        #del self.motorhat
 
 # Simple example to test motors
 if __name__ == '__main__':

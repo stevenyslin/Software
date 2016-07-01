@@ -6,7 +6,7 @@ from duckietown_msgs.msg import  Twist2DStamped, BoolStamped
 from sensor_msgs.msg import Joy
 import time
 from __builtin__ import True
-
+from geometry_msgs.msg import Twist
 class JoyMapper(object):
     def __init__(self):
         self.node_name = rospy.get_name()
@@ -35,6 +35,7 @@ class JoyMapper(object):
         # Subscriptions
         self.sub_joy_ = rospy.Subscriber("joy", Joy, self.cbJoy, queue_size=1)
         
+	self.sub_keyboard = rospy.Subscriber("cmd_vel", Twist, self.cbKeyboard,queue_size=1)
         # timer
         # self.pub_timer = rospy.Timer(rospy.Duration.from_sec(self.pub_timestep),self.publishControl)
         self.param_timer = rospy.Timer(rospy.Duration.from_sec(1.0),self.cbParamTimer)
@@ -57,6 +58,12 @@ class JoyMapper(object):
         self.joy = joy_msg
         self.publishControl()
         self.processButtons(joy_msg)
+
+    def cbKeyboard(self, joy_msg):
+      	 print("GET keeeeeeeeeeeeeeeey")
+#	  self.joy = joy_msg
+      #  self.publishControl()
+      #  self.processButtons(joy_msg)
 
     def publishControl(self):
         car_cmd_msg = Twist2DStamped()

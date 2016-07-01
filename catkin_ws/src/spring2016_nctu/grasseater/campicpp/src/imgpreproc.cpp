@@ -29,16 +29,17 @@ void chatterCallback(sensor_msgs::CompressedImage image_msg)
 	if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
 		circle(cv_ptr->image, Point(150,150), 40, CV_RGB(255,0,0));	
 
-	namedWindow("Camera");
-  	imshow("Camera",cv_ptr->image);
-  	waitKey(1);
+    //namedWindow("Camera");
+  	//imshow("Camera",cv_ptr->image);
+  	//waitKey(1);
 	
 	image_pub.publish(cv_ptr->toImageMsg());
+    ROS_INFO_ONCE("First image published");
 }
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "imgpreproc");
+  ros::init(argc, argv, "listenergrass");
   ros::NodeHandle n;
   image_transport::ImageTransport it(n);
   
