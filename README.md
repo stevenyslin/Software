@@ -11,7 +11,7 @@ It can run on both hardware raspberry pi3, pi2 with *ubuntuMATE* and *ROS Kineti
 for more information and tutorials, please visit :
 http://www.duckietown-bunny.com/
 
-###special thanks to https://hackmd.io/p/SJbHPc-p#/4
+###special thanks to https://hackmd.io/p/SJbHPc-p#/5
 
 
 The image are as follow:
